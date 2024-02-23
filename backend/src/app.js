@@ -34,7 +34,7 @@ app.get('/sales/:id', async (req, res) => {
   const { id } = req.params;
   const sale = await salesModel.findById(id);
 
-  if (!sale) return res.status(404).json({ message: 'Sale not found' });
+  if (!sale || sale.length === 0) return res.status(404).json({ message: 'Sale not found' });
 
   return res.status(200).json(sale);
 });
@@ -52,10 +52,15 @@ app.post('/products', async (req, res) => {
   res.status(201).json(product);
 });
 
+// app.post('/sales', async (req, res) => {
+//   // hello
+// });
+
 app.put('/products/:id', async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
   const product = await productsModel.findById(id);
+  if (!name) return res.status(400).json({ message: '"name" is required' });
   if (!product) return res.status(404).json({ message: 'Product not found' });
   const procuctUpdate = await productsModel.update(id, name);
   res.status(200).json(procuctUpdate);

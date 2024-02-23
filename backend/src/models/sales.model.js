@@ -12,7 +12,7 @@ const findAll = async () => {
 };
 
 const findById = async (saleId) => {
-  const [[sale]] = await connection.execute(
+  const [sales] = await connection.execute(
     `
     SELECT sales.id AS saleId, sales.date,
     sales_products.product_id AS productId, sales_products.quantity
@@ -23,7 +23,31 @@ const findById = async (saleId) => {
     `,
     [saleId],
   );
-  return camelize(sale);
+  return sales.map((sale) => {
+    const camelizedSale = camelize(sale);
+    delete camelizedSale.saleId;
+    return camelizedSale;
+  });
 };
 
-module.exports = { findAll, findById };
+const create = async () => {
+  const [result] = await connection.execute(
+    `
+    INSERT INTO sales (date)
+    VALUES (CURRENT_TIMESTAMP)
+    `,
+  );
+  return result.insertId;
+};
+
+const createSaleProduct = async (saleId, productId, quantity) => {
+  await connection.execute(
+    `
+    INSERT INTO sales_products (sale_id, product_id, quantity)
+    VALUES (?, ?, ?)
+    `,
+    [saleId, productId, quantity],
+  );
+};
+
+module.exports = { findAll, findById, create, createSaleProduct };
