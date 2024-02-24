@@ -1,6 +1,7 @@
 const express = require('express');
 require('express-async-errors');
 const { productsModel, salesModel } = require('./models');
+const { productService } = require('./services');
 
 const app = express();
 
@@ -18,11 +19,15 @@ app.get('/products', async (req, res) => {
 
 app.get('/products/:id', async (req, res) => {
   const { id } = req.params;
-  const product = await productsModel.findById(id);
+  const { name } = req.body;
 
-  if (!product) return res.status(404).json({ message: 'Product not found' });
-
-  return res.status(200).json(product);
+  const serviceResponse = await productService.update(id, name);
+  if (serviceResponse.status === 'NOT_FOUND') {
+    return res.status(404).json({
+      message: serviceResponse.data.message,
+    });
+  }
+  return res.status(200).json(serviceResponse);
 });
 
 app.get('/sales', async (req, res) => {
