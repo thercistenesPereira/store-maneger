@@ -52,17 +52,27 @@ app.post('/products', async (req, res) => {
   res.status(201).json(product);
 });
 
-// app.post('/sales', async (req, res) => {
-//   // hello
-// });
+app.post('/sales', async (req, res) => {
+  const saleBody = req.body;
+  const saleId = await salesModel.create();
+
+  saleBody.forEach((sale) => {
+    salesModel.createSaleProduct(saleId, sale.productId, sale.quantity);
+  });
+
+  res.status(201).json({ id: saleId, itemsSold: saleBody });
+});
 
 app.put('/products/:id', async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
   const product = await productsModel.findById(id);
   if (!name) return res.status(400).json({ message: '"name" is required' });
+  if (name.length <= 5) {
+    return res.status(422).json({ message: '"name" length must be at least 5 characters long' }); 
+  }
   if (!product) return res.status(404).json({ message: 'Product not found' });
-  const procuctUpdate = await productsModel.update(id, name);
+  const procuctUpdate = await productsModel.update(+id, name);
   res.status(200).json(procuctUpdate);
 });
 
