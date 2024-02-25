@@ -1,6 +1,6 @@
 const chai = require('chai');
 const sinon = require('sinon');
-// const connection = require('../../../src/models/connection');
+require('express-async-errors');
 const productServices = require('../../../src/services/products.service');
 const productsModel = require('../../../src/models/products.model');
 
@@ -42,9 +42,18 @@ describe('productsService', function () {
 
   it('Função updateName deve retornar um objeto com status BAD_REQUEST e uma mensagem de erro quando o nome do produto não for informado', async function () {
     const result = await productServices.updateName(null);
+
     expect(result).to.deep.equal({
       status: 'BAD_REQUEST',
       data: { message: '"name" is required' },
+    });
+  });
+
+  it('A função updateNameLength retorna um status UNPROCESSABLE_ENTITY se o nome do produto cadastrado for menor que 5 caracteres', async function () {
+    const result = await productServices.updateNameLength('abc');
+    expect(result).to.deep.equal({
+      status: 'UNPROCESSABLE_ENTITY',
+      data: { message: '"name" length must be at least 5 characters long' },
     });
   });
 });
