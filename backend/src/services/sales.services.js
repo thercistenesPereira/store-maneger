@@ -29,6 +29,8 @@ const saleBodyReponse = async (saleBody) => {
   saleBody.forEach((sale) => {
     createSaleProduct(saleId, sale.productId, sale.quantity);
   });
+
+  return saleId;
 };
 
 module.exports = { searchById, createId, createSaleProduct, saleBodyReponse };

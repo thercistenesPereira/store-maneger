@@ -70,6 +70,18 @@ app.post('/products', async (req, res) => {
 app.post('/sales', async (req, res) => {
   const saleBody = req.body;
 
+  if (saleBody.some((sale) => !('productId' in sale))) {
+    return res.status(400).json({ message: '"productId" is required' });
+  }
+
+  if (saleBody.some((sale) => !('quantity' in sale))) {
+    return res.status(400).json({ message: '"quantity" is required' });
+  }
+
+  if (saleBody.some((sale) => sale.quantity <= 0)) {
+    return res.status(422).json({ message: '"quantity" must be greater than or equal to 1' });
+  }
+  
   const saleId = await salesServices.saleBodyReponse(saleBody);
 
   res.status(201).json({ id: saleId, itemsSold: saleBody });

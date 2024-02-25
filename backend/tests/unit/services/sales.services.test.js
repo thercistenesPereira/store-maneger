@@ -62,4 +62,23 @@ describe('salesService', function () {
 
     expect(result).to.deep.equal(expectedSaleProduct);
   });
+
+  // it('Ao chamar o método saleBodyResponse, este deve interagir com os métodos createId e createSaleProduct', async function () {
+  //   const saleBody = [
+  //     { product1: 1, quantity: 2 },
+  //     { product2: 3, quantity: 4 },
+  //   ];
+
+  //   const expectSaleId = 1;
+
+  //   const createIdStub = sinon.stub(salesServices, 'createId').resolves(expectSaleId);
+  //   const createSaleProductStub = sinon.stub(salesServices, 'createSaleProduct').resolves();
+
+  //   await salesServices.saleBodyReponse(saleBody);
+
+  //   sinon.assert.calledOnce(createIdStub);
+  //   sinon.assert.calledTwice(createSaleProductStub);
+  //   expect(createSaleProductStub.firstCall.args).to.eql([expectSaleId, 1, 2]);
+  //   expect(createSaleProductStub.secondCall.args).to.eql([expectSaleId, 3, 4]);
+  // });
 });
