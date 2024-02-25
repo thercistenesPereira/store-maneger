@@ -49,15 +49,18 @@ app.get('/sales/:id', async (req, res) => {
 app.post('/products', async (req, res) => {
   const { name } = req.body;
 
-  const serviceResponse = await productService.updateName(name);
-  if (serviceResponse && serviceResponse.status === 'BAD_REQUEST') {
+  const serviceResponse2 = await productService.updateName(name);
+  if (serviceResponse2 && serviceResponse2.status === 'BAD_REQUEST') {
     return res.status(400).json({
-      message: serviceResponse.data.message,
+      message: serviceResponse2.data.message,
     });
   }
-
-  if (name.length < 5) {
-    return res.status(422).json({ message: '"name" length must be at least 5 characters long' });
+  
+  const serviceResponse = await productService.updateNameLength(name);
+  if (serviceResponse && serviceResponse.status === 'UNPROCESSABLE_ENTITY') {
+    return res.status(422).json({
+      message: serviceResponse.data.message,
+    });
   }
 
   const product = await productsModel.create(name);

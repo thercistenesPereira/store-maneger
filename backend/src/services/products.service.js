@@ -20,4 +20,13 @@ const updateName = async (name) => {
   }
 };
 
-module.exports = { update, updateName };
+const updateNameLength = async (name) => {
+  if (name.length < 5) {
+    return {
+      status: 'UNPROCESSABLE_ENTITY',
+      data: { message: '"name" length must be at least 5 characters long' },
+    };
+  }
+};
+
+module.exports = { update, updateName, updateNameLength };
