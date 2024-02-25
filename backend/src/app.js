@@ -55,7 +55,7 @@ app.post('/products', async (req, res) => {
       message: serviceResponse2.data.message,
     });
   }
-  
+
   const serviceResponse = await productService.updateNameLength(name);
   if (serviceResponse && serviceResponse.status === 'UNPROCESSABLE_ENTITY') {
     return res.status(422).json({
