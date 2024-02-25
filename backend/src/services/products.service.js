@@ -29,4 +29,14 @@ const updateNameLength = async (name) => {
   }
 };
 
-module.exports = { update, updateName, updateNameLength };
+const listAll = async () => {
+  const products = await productsModel.findAll();
+  return products;
+};
+
+const updateProduct = async (name) => {
+  const product = await productsModel.create(name);
+  return product;
+};
+
+module.exports = { update, updateName, updateNameLength, listAll, updateProduct };

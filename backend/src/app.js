@@ -13,7 +13,7 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/products', async (req, res) => {
-  const products = await productsModel.findAll();
+  const products = await productService.listAll();
   res.status(200).json(products);
 });
 
@@ -63,7 +63,7 @@ app.post('/products', async (req, res) => {
     });
   }
 
-  const product = await productsModel.create(name);
+  const product = await productService.updateProduct(name);
   res.status(201).json(product);
 });
 
