@@ -11,4 +11,13 @@ const update = async (id) => {
   return product;
 };
 
-module.exports = { update };
+const updateName = async (name) => {
+  if (!name) {
+    return {
+      status: 'BAD_REQUEST',
+      data: { message: '"name" is required' },
+    };
+  }
+};
+
+module.exports = { update, updateName };

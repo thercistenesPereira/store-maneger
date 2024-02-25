@@ -1,7 +1,7 @@
 const express = require('express');
 require('express-async-errors');
 const { productsModel, salesModel } = require('./models');
-const { productService } = require('./services');
+const { productService, salesServices } = require('./services');
 
 const app = express();
 
@@ -37,17 +37,25 @@ app.get('/sales', async (req, res) => {
 
 app.get('/sales/:id', async (req, res) => {
   const { id } = req.params;
-  const sale = await salesModel.findById(id);
-
-  if (!sale || sale.length === 0) return res.status(404).json({ message: 'Sale not found' });
-
-  return res.status(200).json(sale);
+  const serviceResponse = await salesServices.searchById(id);
+  if (serviceResponse.status === 'NOT_FOUND') {
+    return res.status(404).json({
+      message: serviceResponse.data.message,
+    });
+  }
+  return res.status(200).json(serviceResponse);
 });
 
 app.post('/products', async (req, res) => {
   const { name } = req.body;
 
   if (!name) return res.status(400).json({ message: '"name" is required' });
+  const serviceResponse = await productService.updateName(name);
+  if (serviceResponse && serviceResponse.status === 'BAD_REQUEST') {
+    return res.status(400).json({
+      message: serviceResponse.data.message,
+    });
+  }
 
   if (name.length < 5) {
     return res.status(422).json({ message: '"name" length must be at least 5 characters long' });
