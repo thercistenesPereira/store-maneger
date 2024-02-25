@@ -53,4 +53,13 @@ describe('salesService', function () {
 
     expect(result).to.equal(expectedSaleId);
   });
+
+  it('Ao chamar o método createSaleProduct na rota POST /sales, deve retornar um objeto', async function () {
+    const expectedSaleProduct = { saleId: 1, productId: 2, quantity: 3 };
+    sinon.stub(salesModel, 'createSaleProduct').resolves(expectedSaleProduct);
+
+    const result = await salesServices.createSaleProduct(1, 2, 3);
+
+    expect(result).to.deep.equal(expectedSaleProduct);
+  });
 });

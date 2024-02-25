@@ -69,11 +69,8 @@ app.post('/products', async (req, res) => {
 
 app.post('/sales', async (req, res) => {
   const saleBody = req.body;
-  const saleId = await salesServices.createId();
 
-  saleBody.forEach((sale) => {
-    salesModel.createSaleProduct(saleId, sale.productId, sale.quantity);
-  });
+  const saleId = await salesServices.saleBodyReponse(saleBody);
 
   res.status(201).json({ id: saleId, itemsSold: saleBody });
 });

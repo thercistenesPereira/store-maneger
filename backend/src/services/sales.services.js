@@ -18,4 +18,17 @@ const createId = async () => {
   return saleId;
 };
 
-module.exports = { searchById, createId };
+const createSaleProduct = async (saleId, productId, quantity) => {
+  const saleProduct = await salesModel.createSaleProduct(saleId, productId, quantity);
+  return saleProduct;
+};
+
+const saleBodyReponse = async (saleBody) => {
+  const saleId = await createId();
+
+  saleBody.forEach((sale) => {
+    createSaleProduct(saleId, sale.productId, sale.quantity);
+  });
+};
+
+module.exports = { searchById, createId, createSaleProduct, saleBodyReponse };
