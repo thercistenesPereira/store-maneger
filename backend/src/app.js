@@ -122,4 +122,16 @@ app.put('/products/:id', checkNameUpdate, async (req, res) => {
   res.status(200).json(procuctUpdate);
 });
 
+app.delete('/products/:id', async (req, res) => {
+  const { id } = req.params;
+
+  const [result] = await productsModel.remove(id);
+
+  if (result.affectedRows > 0) {
+    res.status(204).end();
+  } else {
+    res.status(404).json({ message: 'Product not found' }); 
+  }
+});
+
 module.exports = app;

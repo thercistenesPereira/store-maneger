@@ -26,4 +26,7 @@ const update = async (id, name) => {
   await connection.execute('UPDATE products SET name = ? WHERE id = ?', [name, id]);
   return { id, name };
 };
-module.exports = { findAll, findById, create, update };
+
+const remove = (id) => connection.execute('DELETE FROM products WHERE id = ?', [id]);
+
+module.exports = { findAll, findById, create, update, remove };
