@@ -125,12 +125,13 @@ app.put('/products/:id', checkNameUpdate, async (req, res) => {
 app.delete('/products/:id', async (req, res) => {
   const { id } = req.params;
 
-  const [result] = await productsModel.remove(id);
+  const result = await productService.removeById(id);
+  const response = await productService.checkRemove(result);
 
-  if (result.affectedRows > 0) {
+  if (response && response.status === 'NO_CONTENT') {
     res.status(204).end();
   } else {
-    res.status(404).json({ message: 'Product not found' }); 
+    res.status(404).json({ message: response.data.message }); 
   }
 });
 

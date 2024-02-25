@@ -29,6 +29,17 @@ const updateNameLength = async (name) => {
   }
 };
 
+const checkRemove = async (result) => {
+  if (result.affectedRows > 0) {
+    return {
+      status: 'NO_CONTENT',
+    };
+  } 
+  return {
+    data: { message: 'Product not found' },
+  };
+};
+
 const listAll = async () => {
   const products = await productsModel.findAll();
   return products;
@@ -39,4 +50,17 @@ const updateProduct = async (name) => {
   return product;
 };
 
-module.exports = { update, updateName, updateNameLength, listAll, updateProduct };
+const removeById = async (id) => {
+  const [result] = await productsModel.remove(id);
+  return result;
+};
+
+module.exports = {
+  update,
+  updateName,
+  updateNameLength,
+  listAll,
+  updateProduct,
+  removeById,
+  checkRemove,
+};

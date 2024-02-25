@@ -64,7 +64,7 @@ describe('salesService', function () {
     expect(result).to.deep.equal(expectedSaleProduct);
   });
 
-  it('Ao chamar um id válido deve retornar um prodito correspondente', async function () {
+  it('Ao chamar um id válido deve retornar um produto correspondente', async function () {
     const product = {
       id: 1,
       name: 'Product Test',

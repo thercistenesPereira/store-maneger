@@ -5,6 +5,7 @@ const productServices = require('../../../src/services/products.service');
 const productsModel = require('../../../src/models/products.model');
 
 const { expect } = chai;
+const { assert } = chai;
 
 describe('productsService', function () {
   afterEach(function () {
@@ -55,5 +56,18 @@ describe('productsService', function () {
       status: 'UNPROCESSABLE_ENTITY',
       data: { message: '"name" length must be at least 5 characters long' },
     });
+  });
+
+  it('deve remover um produto e retornar o resultado', async function () {
+    const id = 1;
+    const mockResult = { affectedRows: 1 };
+
+    const removeStub = sinon.stub(productsModel, 'remove');
+    removeStub.withArgs(id).resolves([mockResult]);
+
+    const result = await productServices.removeById(id);
+
+    expect(result).to.deep.equal(mockResult);
+    assert.isTrue(removeStub.calledWith(id));
   });
 });
