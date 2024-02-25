@@ -3,6 +3,7 @@ const sinon = require('sinon');
 // const connection = require('../../../src/models/connection');
 const salesServices = require('../../../src/services/sales.services');
 const salesModel = require('../../../src/models/sales.model');
+const { productsModel } = require('../../../src/models');
 
 const { expect } = chai;
 
@@ -63,22 +64,53 @@ describe('salesService', function () {
     expect(result).to.deep.equal(expectedSaleProduct);
   });
 
+  it('Ao chamar um id válido deve retornar um prodito correspondente', async function () {
+    const product = {
+      id: 1,
+      name: 'Product Test',
+      quantity: 10,
+    };
+
+    const findByIdStub = sinon.stub(productsModel, 'findById').resolves(product);
+
+    const result = await salesServices.productUpdate(product.id);
+
+    expect(result).to.deep.equal(product);
+
+    expect(findByIdStub.calledOnceWith(product.id)).to.equal(true);
+    expect(result).to.deep.equal(product);
+  });
+
+  it('Ao chamar a função com um id inválido, deve retornar um objeto de erro', async function () {
+    const invalidId = -999;
+
+    const findByIdStub = sinon.stub(productsModel, 'findById').resolves(null);
+
+    const result = await salesServices.productUpdate(invalidId);
+
+    expect(findByIdStub.calledOnceWith(invalidId)).to.equal(true);
+    expect(result).to.deep.equal({
+      status: 'NOT_FOUND',
+      data: { message: 'Product not found' },
+    });
+  });
+
   // it('Ao chamar o método saleBodyResponse, este deve interagir com os métodos createId e createSaleProduct', async function () {
   //   const saleBody = [
-  //     { product1: 1, quantity: 2 },
-  //     { product2: 3, quantity: 4 },
+  //     { productId: 1, quantity: 2 },
+  //     { productId: 3, quantity: 4 },
   //   ];
-
+  
   //   const expectSaleId = 1;
-
+  
   //   const createIdStub = sinon.stub(salesServices, 'createId').resolves(expectSaleId);
   //   const createSaleProductStub = sinon.stub(salesServices, 'createSaleProduct').resolves();
-
+  
   //   await salesServices.saleBodyReponse(saleBody);
-
+  
   //   sinon.assert.calledOnce(createIdStub);
-  //   sinon.assert.calledTwice(createSaleProductStub);
-  //   expect(createSaleProductStub.firstCall.args).to.eql([expectSaleId, 1, 2]);
-  //   expect(createSaleProductStub.secondCall.args).to.eql([expectSaleId, 3, 4]);
+  //   sinon.assert.callCount(createSaleProductStub, saleBody.length);
+  //   expect(createSaleProductStub.getCall(0).args).to.eql([expectSaleId, 1, 2]);
+  //   expect(createSaleProductStub.getCall(1).args).to.eql([expectSaleId, 3, 4]);
   // });
 });

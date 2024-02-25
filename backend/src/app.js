@@ -87,15 +87,37 @@ app.post('/sales', async (req, res) => {
   res.status(201).json({ id: saleId, itemsSold: saleBody });
 });
 
-app.put('/products/:id', async (req, res) => {
+const checkNameUpdate = async (req, res, next) => {
+  const { name } = req.body;
+
+  const serviceResponse2 = await productService.updateName(name);
+  if (serviceResponse2 && serviceResponse2.status === 'BAD_REQUEST') {
+    return res.status(400).json({
+      message: serviceResponse2.data.message,
+    });
+  }
+
+  next();
+};
+
+app.put('/products/:id', checkNameUpdate, async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
-  const product = await productsModel.findById(id);
-  if (!name) return res.status(400).json({ message: '"name" is required' });
-  if (name.length <= 5) {
-    return res.status(422).json({ message: '"name" length must be at least 5 characters long' }); 
+
+  const nameCheck = salesServices.nameLength(name);
+  if (nameCheck && nameCheck.status === 'UNPROCESSABLE_ENTITY') {
+    return res.status(422).json({
+      message: nameCheck.data.message,
+    });
   }
-  if (!product) return res.status(404).json({ message: 'Product not found' });
+
+  const product = await salesServices.productUpdate(id);
+  if (product && product.status === 'NOT_FOUND') {
+    return res.status(404).json({
+      message: product.data.message,
+    });
+  }
+
   const procuctUpdate = await productsModel.update(+id, name);
   res.status(200).json(procuctUpdate);
 });

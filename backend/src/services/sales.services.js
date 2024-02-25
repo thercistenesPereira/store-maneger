@@ -1,4 +1,5 @@
-const { salesModel } = require('../models');
+const { salesModel, productsModel } = require('../models');
+
 require('express-async-errors');
 
 const searchById = async (id) => {
@@ -18,6 +19,32 @@ const createId = async () => {
   return saleId;
 };
 
+//  if (!product) return res.status(404).json({ message: 'Product not found' });
+const productUpdate = async (id) => {
+  const product = await productsModel.findById(id);
+
+  if (!product) {
+    return {
+      status: 'NOT_FOUND',
+      data: { message: 'Product not found' },
+    };
+  }
+  return product;
+};
+
+// if (name.length <= 5) {
+//   return res.status(422).json({ message: '"name" length must be at least 5 characters long' }); 
+// }
+
+const nameLength = (name) => {
+  if (name.length <= 5) {
+    return {
+      status: 'UNPROCESSABLE_ENTITY',
+      data: { message: '"name" length must be at least 5 characters long' },
+    };
+  }
+};
+
 const createSaleProduct = async (saleId, productId, quantity) => {
   const saleProduct = await salesModel.createSaleProduct(saleId, productId, quantity);
   return saleProduct;
@@ -33,4 +60,11 @@ const saleBodyReponse = async (saleBody) => {
   return saleId;
 };
 
-module.exports = { searchById, createId, createSaleProduct, saleBodyReponse };
+module.exports = {
+  searchById,
+  createId,
+  createSaleProduct,
+  saleBodyReponse,
+  productUpdate,
+  nameLength,
+};
