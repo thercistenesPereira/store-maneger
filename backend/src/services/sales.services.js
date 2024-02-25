@@ -43,6 +43,10 @@ const nameLength = (name) => {
       data: { message: '"name" length must be at least 5 characters long' },
     };
   }
+
+  return {
+    status: 'OK',
+  };
 };
 
 const createSaleProduct = async (saleId, productId, quantity) => {
