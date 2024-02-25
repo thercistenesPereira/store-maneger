@@ -39,4 +39,12 @@ describe('productsService', function () {
     // Assertiva
     expect(result).to.deep.equal(products);
   });
+
+  it('Função updateName deve retornar um objeto com status BAD_REQUEST e uma mensagem de erro quando o nome do produto não for informado', async function () {
+    const result = await productServices.updateName(null);
+    expect(result).to.deep.equal({
+      status: 'BAD_REQUEST',
+      data: { message: '"name" is required' },
+    });
+  });
 });

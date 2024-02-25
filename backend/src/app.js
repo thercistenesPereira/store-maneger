@@ -49,7 +49,6 @@ app.get('/sales/:id', async (req, res) => {
 app.post('/products', async (req, res) => {
   const { name } = req.body;
 
-  if (!name) return res.status(400).json({ message: '"name" is required' });
   const serviceResponse = await productService.updateName(name);
   if (serviceResponse && serviceResponse.status === 'BAD_REQUEST') {
     return res.status(400).json({
