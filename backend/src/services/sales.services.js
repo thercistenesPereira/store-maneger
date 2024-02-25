@@ -13,4 +13,9 @@ const searchById = async (id) => {
   return sale;
 };
 
-module.exports = { searchById };
+const createId = async () => {
+  const saleId = await salesModel.create();
+  return saleId;
+};
+
+module.exports = { searchById, createId };

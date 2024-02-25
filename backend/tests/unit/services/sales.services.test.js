@@ -44,4 +44,13 @@ describe('salesService', function () {
     // Assertiva
     expect(result).to.deep.equal(products);
   });
+
+  it('Ao chamar o método createId na rota POST /sales, deve retornar um id', async function () {
+    const expectedSaleId = 1;
+    sinon.stub(salesModel, 'create').resolves(expectedSaleId);
+
+    const result = await salesServices.createId();
+
+    expect(result).to.equal(expectedSaleId);
+  });
 });

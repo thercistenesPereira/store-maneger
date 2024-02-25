@@ -69,7 +69,7 @@ app.post('/products', async (req, res) => {
 
 app.post('/sales', async (req, res) => {
   const saleBody = req.body;
-  const saleId = await salesModel.create();
+  const saleId = await salesServices.createId();
 
   saleBody.forEach((sale) => {
     salesModel.createSaleProduct(saleId, sale.productId, sale.quantity);
