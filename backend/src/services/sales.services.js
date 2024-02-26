@@ -1,6 +1,5 @@
-const { salesModel, productsModel } = require('../models');
-
 require('express-async-errors');
+const { salesModel, productsModel } = require('../models');
 
 const searchById = async (id) => {
   const sale = await salesModel.findById(id);
@@ -19,7 +18,6 @@ const createId = async () => {
   return saleId;
 };
 
-//  if (!product) return res.status(404).json({ message: 'Product not found' });
 const productUpdate = async (id) => {
   const product = await productsModel.findById(id);
 
@@ -31,10 +29,6 @@ const productUpdate = async (id) => {
   }
   return product;
 };
-
-// if (name.length <= 5) {
-//   return res.status(422).json({ message: '"name" length must be at least 5 characters long' }); 
-// }
 
 const nameLength = (name) => {
   if (name.length <= 5) {

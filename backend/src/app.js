@@ -73,6 +73,13 @@ app.post('/sales', async (req, res) => {
   if (saleBody.some((sale) => !('productId' in sale))) {
     return res.status(400).json({ message: '"productId" is required' });
   }
+  const promises = saleBody.map((sale) => productsModel.findById(sale.productId));
+
+  const promisesResult = await Promise.all(promises);
+
+  if (promisesResult.some((sale) => !sale)) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
 
   if (saleBody.some((sale) => !('quantity' in sale))) {
     return res.status(400).json({ message: '"quantity" is required' });
