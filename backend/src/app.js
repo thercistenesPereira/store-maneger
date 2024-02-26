@@ -1,7 +1,8 @@
 const express = require('express');
 require('express-async-errors');
 const { productsModel, salesModel } = require('./models');
-const { productService, salesServices } = require('./services');
+const { productService, salesServices, validateInputProducts } = require('./services');
+const { productsMiddleware } = require('./middlewares');
 
 const app = express();
 
@@ -46,22 +47,8 @@ app.get('/sales/:id', async (req, res) => {
   return res.status(200).json(serviceResponse);
 });
 
-app.post('/products', async (req, res) => {
+app.post('/products', productsMiddleware.validateProductName, async (req, res) => {
   const { name } = req.body;
-
-  const serviceResponse2 = await productService.updateName(name);
-  if (serviceResponse2 && serviceResponse2.status === 'BAD_REQUEST') {
-    return res.status(400).json({
-      message: serviceResponse2.data.message,
-    });
-  }
-
-  const serviceResponse = await productService.updateNameLength(name);
-  if (serviceResponse && serviceResponse.status === 'UNPROCESSABLE_ENTITY') {
-    return res.status(422).json({
-      message: serviceResponse.data.message,
-    });
-  }
 
   const product = await productService.updateProduct(name);
   res.status(201).json(product);
