@@ -70,9 +70,11 @@ app.post('/products', async (req, res) => {
 app.post('/sales', async (req, res) => {
   const saleBody = req.body;
 
-  if (saleBody.some((sale) => !('productId' in sale))) {
-    return res.status(400).json({ message: '"productId" is required' });
+  const productCheck = await productService.expectByProduct(saleBody);
+  if (productCheck && productCheck.status === 'BAD_REQUEST') {
+    return res.status(400).json(productCheck.data);
   }
+
   const promises = saleBody.map((sale) => productsModel.findById(sale.productId));
 
   const promisesResult = await Promise.all(promises);

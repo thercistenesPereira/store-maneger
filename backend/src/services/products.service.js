@@ -55,6 +55,15 @@ const removeById = async (id) => {
   return result;
 };
 
+const expectByProduct = async (saleBody) => {
+  if (saleBody.some((sale) => !('productId' in sale))) {
+    return {
+      status: 'BAD_REQUEST',
+      data: { message: '"productId" is required' },
+    };
+  }
+};
+
 module.exports = {
   update,
   updateName,
@@ -63,4 +72,5 @@ module.exports = {
   updateProduct,
   removeById,
   checkRemove,
+  expectByProduct,
 };
