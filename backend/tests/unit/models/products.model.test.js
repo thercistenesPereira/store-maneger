@@ -2,6 +2,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 const connection = require('../../../src/models/connection');
 const productModel = require('../../../src/models/products.model');
+const { productService } = require('../../../src/services');
 
 const { expect } = chai;
 
@@ -49,5 +50,19 @@ describe('ProductModel', function () {
     const result = await productModel.update(id, name);
 
     expect(result).to.deep.equal({ id, name });
+  });
+
+  it('Retorna um status de erro e uma mensagem caso o produto não seja encontrado na tabela products', async function () {
+    const saleBody = [
+      { productId: 1, quantity: 2 },
+      { quantity: 3 },
+    ];
+
+    const result = await productService.expectByProduct(saleBody);
+
+    expect(result).to.deep.equal({
+      status: 'BAD_REQUEST',
+      data: { message: '"productId" is required' },
+    });
   });
 });
