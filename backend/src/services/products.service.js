@@ -11,24 +11,6 @@ const update = async (id) => {
   return product;
 };
 
-const updateName = async (name) => {
-  if (!name) {
-    return {
-      status: 'BAD_REQUEST',
-      data: { message: '"name" is required' },
-    };
-  }
-};
-
-const updateNameLength = async (name) => {
-  if (name.length < 5) {
-    return {
-      status: 'UNPROCESSABLE_ENTITY',
-      data: { message: '"name" length must be at least 5 characters long' },
-    };
-  }
-};
-
 const checkRemove = async (result) => {
   if (result.affectedRows > 0) {
     return {
@@ -66,8 +48,6 @@ const expectByProduct = async (saleBody) => {
 
 module.exports = {
   update,
-  updateName,
-  updateNameLength,
   listAll,
   updateProduct,
   removeById,

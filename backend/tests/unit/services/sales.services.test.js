@@ -94,23 +94,4 @@ describe('salesService', function () {
       data: { message: 'Product not found' },
     });
   });
-
-  // it('Ao chamar o método saleBodyResponse, este deve interagir com os métodos createId e createSaleProduct', async function () {
-  //   const saleBody = [
-  //     { productId: 1, quantity: 2 },
-  //     { productId: 3, quantity: 4 },
-  //   ];
-  
-  //   const expectSaleId = 1;
-  
-  //   const createIdStub = sinon.stub(salesServices, 'createId').resolves(expectSaleId);
-  //   const createSaleProductStub = sinon.stub(salesServices, 'createSaleProduct').resolves();
-  
-  //   await salesServices.saleBodyReponse(saleBody);
-  
-  //   sinon.assert.calledOnce(createIdStub);
-  //   sinon.assert.callCount(createSaleProductStub, saleBody.length);
-  //   expect(createSaleProductStub.getCall(0).args).to.eql([expectSaleId, 1, 2]);
-  //   expect(createSaleProductStub.getCall(1).args).to.eql([expectSaleId, 3, 4]);
-  // });
 });

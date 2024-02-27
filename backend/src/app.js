@@ -1,7 +1,8 @@
 const express = require('express');
 require('express-async-errors');
 const { productsModel, salesModel } = require('./models');
-const { productService, salesServices, validateInputProducts } = require('./services');
+const { productService, salesServices } = require('./services');
+const { produtsRoutes } = require('./routes');
 const { productsMiddleware } = require('./middlewares');
 
 const app = express();
@@ -13,10 +14,12 @@ app.get('/', (_request, response) => {
   response.json({ status: 'Store Manager UP!' });
 });
 
-app.get('/products', async (req, res) => {
-  const products = await productService.listAll();
-  res.status(200).json(products);
-});
+app.use('/products', produtsRoutes);
+
+// app.get('/products', async (req, res) => {
+//   const products = await productService.listAll();
+//   res.status(200).json(products);
+// });
 
 app.get('/products/:id', async (req, res) => {
   const { id } = req.params;
@@ -51,6 +54,7 @@ app.post('/products', productsMiddleware.validateProductName, async (req, res) =
   const { name } = req.body;
 
   const product = await productService.updateProduct(name);
+
   res.status(201).json(product);
 });
 
