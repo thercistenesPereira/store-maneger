@@ -61,10 +61,10 @@ app.post('/products', productsMiddleware.validateProductName, async (req, res) =
 app.post('/sales', async (req, res) => {
   const saleBody = req.body;
 
-  const productCheck = await productService.expectByProduct(saleBody);
-  if (productCheck && productCheck.status === 'BAD_REQUEST') {
-    return res.status(400).json(productCheck.data);
-  }
+  // const productCheck = await productService.expectByProduct(saleBody);
+  // if (productCheck && productCheck.status === 'BAD_REQUEST') {
+  //   return res.status(400).json(productCheck.data);
+  // }
 
   const promises = saleBody.map((sale) => productsModel.findById(sale.productId));
 
